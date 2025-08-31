@@ -22,21 +22,47 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
+
+    # List of supported system architectures
     systems = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    overlays = import ./overlays {inherit inputs outputs;};
 
-    nixosConfigurations = {
-      # main laptop
-      erza = nixpkgs.lib.nixosSystem {
+    # Pre-import pkgs once for each system
+    pkgsFor = nixpkgs.lib.genAttrs systems (
+      system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+    );
+    # Function to generate set of attributes for each system
+    forEachSystem = func: nixpkgs.lib.genAttrs systems (system: func pkgsFor.${system});
+
+    # Determine the list of host configurations
+    hostsDir = ./hosts;
+    hostsDirSet = builtins.readDir ./hosts;
+    isHost = name:
+      hostsDirSet.${name} == "directory"
+      && ! builtins.elem name ["common"]
+      && builtins.pathExists (hostsDir + "/${name}/default.nix");
+    hostNames = builtins.filter isHost (builtins.attrNames hostsDirSet);
+  in {
+    # Overlays
+    overlays = import ./overlays {inherit inputs outputs;};
+    # Custom packages
+    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+    # Formatter (enable nix fmt)
+    formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style);
+
+    # Host configs
+    nixosConfigurations = nixpkgs.lib.genAttrs hostNames (
+      host: nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/erza];
-      };
-    };
+        modules = [(hostsDir + "/${host}")];
+      }
+    );
+
   };
 }
