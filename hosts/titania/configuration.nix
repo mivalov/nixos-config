@@ -5,10 +5,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+  imports = [ ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -96,15 +93,6 @@
 
   # Install firefox.
   programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Enable the Flakes feature and the accompanying new nix command-line tool
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
