@@ -4,6 +4,7 @@
   inputs,
   outputs,
   ...
-}: {
-  imports = [];
+}:
+{
+  imports = [ ];
 }
