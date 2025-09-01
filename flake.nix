@@ -54,7 +54,7 @@
     # Custom packages
     packages = forAllSystems (pkgs: import ./pkgs {inherit pkgs;});
     # Formatter (enable nix fmt)
-    formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
 
     # Host configs
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames (
