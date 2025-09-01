@@ -38,7 +38,7 @@
         }
     );
     # Function to generate set of attributes for each system
-    forEachSystem = func: nixpkgs.lib.genAttrs systems (system: func pkgsFor.${system});
+    forAllSystems = func: nixpkgs.lib.genAttrs systems (system: func pkgsFor.${system});
 
     # Determine the list of host configurations
     hostsDir = ./hosts;
@@ -52,9 +52,9 @@
     # Overlays
     overlays = import ./overlays {inherit inputs outputs;};
     # Custom packages
-    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+    packages = forAllSystems (pkgs: import ./pkgs {inherit pkgs;});
     # Formatter (enable nix fmt)
-    formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style);
+    formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
 
     # Host configs
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames (
