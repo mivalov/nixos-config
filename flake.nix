@@ -27,7 +27,7 @@
 
       # List of supported system architectures
       systems = [
-        "aarch64-linux"
+        # "aarch64-linux"  # could be enabled later when needed
         "x86_64-linux"
       ];
 
