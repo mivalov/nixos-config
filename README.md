@@ -65,9 +65,6 @@ sudo nixos-rebuild switch --rollback
 Home Manager is used as a module, so we must avoid `home-manager switch` on NixOS systems.
 
 ```bash
-# news
-home-manager news
-
 # list generations
 home-manager generations
 
