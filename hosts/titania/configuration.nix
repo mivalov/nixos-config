@@ -79,17 +79,17 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mvalov = {
-    isNormalUser = true;
-    description = "mvalov";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-    packages = with pkgs; [
-      #  thunderbird
-    ];
-  };
+  #  users.users.mvalov = {
+  #    isNormalUser = true;
+  #    description = "mvalov";
+  #    extraGroups = [
+  #      "networkmanager"
+  #      "wheel"
+  #    ];
+  #    packages = with pkgs; [
+  #      #  thunderbird
+  #    ];
+  #  };
 
   # Install firefox.
   programs.firefox.enable = true;

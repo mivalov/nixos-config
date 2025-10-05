@@ -6,7 +6,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../common
+    ../common/global
+    ../common/users/mvalov
     ./configuration.nix
   ];
 }

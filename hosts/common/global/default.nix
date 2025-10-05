@@ -6,7 +6,10 @@
   ...
 }:
 {
-  imports = [ ];
+  imports = [
+    ./home-manager.nix
+  ];
+
   nixpkgs = {
     config = {
       # Allow unfree packages
