@@ -57,7 +57,7 @@ sudo nixos-rebuild switch --flake .#<host>
 nixos-rebuild list-generations
 
 # Switch back to previous system generation
-sudo nixos-rebuild switch --rollback
+sudo nixos-rebuild switch --flake .#<host> --rollback
 ```
 
 ### Safe HM commands
