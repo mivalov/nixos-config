@@ -6,7 +6,9 @@
   ...
 }:
 {
-  imports = [ ];
+  imports = [
+    ../../common/global
+  ];
 
   # Sensible defaults, handy for stand-alone HM later on
   home = {
