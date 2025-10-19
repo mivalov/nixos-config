@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ];
+  #imports = [ ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
