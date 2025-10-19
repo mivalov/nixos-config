@@ -80,6 +80,9 @@ home-manager build --flake .#<user>@<host>
 ### Toubleshooting
 
 ```bash
+# open the configuration in nix repl
+nixos-rebuild repl --flake .
+
 # build only
 sudo nixos-rebuild build --flake .
 
