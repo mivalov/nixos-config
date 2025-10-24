@@ -13,7 +13,7 @@ in
   # Define a user account
   users.users.${username} = {
     isNormalUser = true;
-    description = username;
+    description = "Miroslav Valov";
     extraGroups = ifTheyExist [
       "networkmanager"
       "wheel"
