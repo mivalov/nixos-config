@@ -8,8 +8,24 @@
   #imports = [];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      efi.canTouchEfiVariables = true;
+      timeout = 10;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10; # max amount of latest generations in boot menu
+      };
+      # you can choose between systemd-boot and grub
+      #grub = {
+      #  enable = true;
+      #  efiSupport = true; # install to the ESP at /boot/EFI
+      #  device = "nodev";
+      #  useOSProber = true; # optional, detect Windows/other Linux distros
+      #  configurationLimit = 10; # max amount of latest generations in boot menu
+      #};
+    };
+  };
 
   networking.hostName = "yamato"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
