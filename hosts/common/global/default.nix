@@ -13,22 +13,22 @@
   nixpkgs = {
     config = {
       # Allow unfree packages
-      allowUnfree = true;
+      allowUnfree = lib.mkDefault true;
     };
   };
   nix = {
     settings = {
       # Enable the Flakes feature and the new nix cli
-      experimental-features = [
+      experimental-features = lib.mkDefault [
         "nix-command"
         "flakes"
       ];
     };
     gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
+      automatic = lib.mkDefault true;
+      dates = lib.mkDefault "weekly";
+      options = lib.mkDefault "--delete-older-than 30d";
     };
-    optimise.automatic = true;
+    optimise.automatic = lib.mkDefault true;
   };
 }
