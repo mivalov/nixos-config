@@ -35,12 +35,19 @@ Flake-based NixOS setup with per-host configs and Home-Manager as a NixOS module
 
 ### Adding a new host
 
-1. Create `hosts/<new-host>/{default.nix,hardware-configuration.nix}` and possibly other `*.nix` files
-2. In `hosts/<new-host>/default.nix` import:
+1. Make sure to enable experimental nix CLI and flakes (in `/etc/nixos/configuration.nix`):
+    - `nix.settings.experimental-features = [ "nix-command" "flakes" ];`
+    - optionally, add vim/wget/curl, etc. or update  `networking.hostName`
+    - run `sudo nixos-rebuild switch`
+2. Create `hosts/<new-host>/{default.nix,hardware-configuration.nix}` and possibly other `*.nix` files:
+    - first, copy existing configs: `cp /etc/nixos/*.nix hosts/<new-host>/`
+    - then you can build on top of them
+3. In `hosts/<new-host>/default.nix` import:
     - `../common/global`
     - one or more files from `../common/optional/*.nix` as needed
     - the right user module(s) from `../common/users/...`
-3. Run `sudo nixos-rebuild switch --flake .#<new-host>`
+4. When Home Manager is enabled, make sure to add `home/<user>/<new-host>.nix`
+5. Run `sudo nixos-rebuild switch --flake .#<new-host>`
 
 ## Basic Nix/NixOS and HM commands
 
