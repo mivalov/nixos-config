@@ -35,22 +35,32 @@ in
       showDirtyState = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enables GIT_PS1_SHOWDIRTYSTATE, which adds *,+ when dirty/staged";
+        description = "Enables GIT_PS1_SHOWDIRTYSTATE, which adds *,+ when dirty/staged.";
       };
       showStashState = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enables GIT_PS1_SHOWSTASHSTATE, which adds $ when stash entries exist";
+        description = "Enables GIT_PS1_SHOWSTASHSTATE, which adds $ when stash entries exist.";
       };
       showUntrackedFiles = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enables GIT_PS1_SHOWUNTRACKEDFILES, which adds % when untracked files exist";
+        description = "Enables GIT_PS1_SHOWUNTRACKEDFILES, which adds % when untracked files exist.";
       };
       showUpstream = lib.mkOption {
         type = lib.types.str;
         default = ""; # accepts "", "auto", "git", etc.
-        description = "Sets GIT_PS1_SHOWUPSTREAM=auto, which adds =/>/< for sync/ahead/behind";
+        description = "Sets GIT_PS1_SHOWUPSTREAM=auto, which adds =/>/< for sync/ahead/behind.";
+      };
+      colorDirty = lib.mkOption {
+        type = lib.types.str;
+        default = "BRIGHT_YELLOW";
+        description = "Bash color variable used for a dirty git branch state.";
+      };
+      colorClean = lib.mkOption {
+        type = lib.types.str;
+        default = "BRIGHT_GREEN";
+        description = "Bash color variable used for a clean git branch state.";
       };
     };
   };
@@ -106,9 +116,9 @@ in
         function git_branch_status() {
           git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
           if [ -z "$(git status --porcelain 2>/dev/null)" ]; then
-            printf '%s' "''${BRIGHT_GREEN}$(__git_ps1 '(%s)')''${RESET}"
+            printf '%s' "''${${lib.toUpper config.features.bash.gitPrompt.colorClean}}$(__git_ps1 '(%s)')''${RESET}"
           else
-            printf '%s' "''${BRIGHT_YELLOW}$(__git_ps1 '(%s)')''${RESET}"
+            printf '%s' "''${${lib.toUpper config.features.bash.gitPrompt.colorDirty}}$(__git_ps1 '(%s)')''${RESET}"
           fi
         }
 
