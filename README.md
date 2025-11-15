@@ -67,6 +67,9 @@ sudo nixos-rebuild switch --flake .#<host>
 # List available generations
 nixos-rebuild list-generations
 
+# View all available historical versions
+nix profile history --profile /nix/var/nix/profiles/system
+
 # Switch back to previous system generation
 sudo nixos-rebuild switch --flake .#<host> --rollback
 ```
@@ -76,10 +79,10 @@ sudo nixos-rebuild switch --flake .#<host> --rollback
 Home Manager is used as a module, so we must avoid `home-manager switch` on NixOS systems.
 
 ```bash
-# list generations
+# List generations
 home-manager generations
 
-# build activation (without apply), then preview
+# Build activation (without apply), then preview
 home-manager build --flake .#<user>@<host>
 ./result/activate --dry-run
 ```
@@ -87,24 +90,34 @@ home-manager build --flake .#<user>@<host>
 ### Toubleshooting
 
 ```bash
-# open the configuration in nix repl
+# Open the configuration in nix repl
 nixos-rebuild repl --flake .
 
-# build only
+# Build only
 sudo nixos-rebuild build --flake .
 
-# display diff
+# Display diff
 nix store diff-closures /run/current-system ./result
 
-# preview dry-run
+# Preview dry-run
 sudo ./result/bin/switch-to-configuration dry-activate
 
-# on success, apply the build
+# On success, apply the build
 sudo nixos-rebuild switch --flake .
 
-# discard the build
+# Discard the build
 rm -f ./result
 nix store gc
+```
+
+#### Check differences between two generations
+
+```bash
+# Check diff between the 2nd generation (previous) and the current one
+nix store diff-closures /nix/var/nix/profiles/system-2-link /run/current-system
+
+# The same result as previous command
+nix store diff-closures /nix/var/nix/profiles/system-2-link /nix/var/nix/profiles/system
 ```
 
 ## Home Manager on non-NixOS system (e.g. work-host)
@@ -121,18 +134,18 @@ nix store gc
 The following commands are only for non-NixOS systems and after bootstrap.
 
 ```bash
-# apply changes
+# Apply changes
 home-manager switch --flake .#<user>@<work-host>
 
-# only build changes: ./result/activate --dry-run
+# Only build changes: ./result/activate --dry-run
 home-manager build --flake .#<user>@<work-host>
 
-# list HM config generations
+# List HM config generations
 home-manager generations
 
-# expire generations older than 14 days
+# Expire generations older than 14 days
 home-manager expire-generations --older-than 14d
 
-# remove expired generations and old packages
+# Remove expired generations and old packages
 nix store gc
 ```
