@@ -7,6 +7,7 @@
 }:
 {
   imports = [
+    ./keyboard.nix
     ./home-manager.nix
   ];
 
