@@ -20,7 +20,7 @@
   nix = {
     settings = {
       # Enable the Flakes feature and the new nix cli
-      experimental-features = lib.mkDefault [
+      experimental-features = [
         "nix-command"
         "flakes"
       ];
