@@ -52,11 +52,23 @@ in
         show-battery-percentage = mkDefault true;
       };
 
+      "org/gnome/desktop/media-handling" = {
+        autorun-never = mkDefault true;
+      };
+
+      "org/gnome/desktop/privacy" = {
+        recent-files-max-age = mkDefault 7;
+      };
+
       "org/gnome/desktop/wm/keybindings" = {
         switch-applications = mkDefault [ "<Super>Tab" ];
         switch-applications-backward = mkDefault [ "<Shift><Super>Tab" ];
         switch-windows = mkDefault [ "<Alt>Tab" ];
         switch-windows-backward = mkDefault [ "<Shift><Alt>Tab" ];
+      };
+
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = mkDefault "appmenu:minimize,maximize,close";
       };
 
       "org/gnome/settings-daemon/plugins/color" = {
@@ -74,6 +86,14 @@ in
         binding = mkDefault "<Control><Alt>t";
         command = mkDefault "kgx";
         name = mkDefault "Launch Gnome Console";
+      };
+
+      "org/gtk/settings/file-chooser" = {
+        clock-format = mkDefault "24h";
+      };
+
+      "system/locale" = {
+        region = mkDefault "de_DE.UTF-8";
       };
     };
   };
