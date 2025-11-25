@@ -36,8 +36,14 @@ in
       "org/gnome/shell/extensions/dash-to-dock" = {
         apply-custom-theme = mkDefault false;
         autohide-in-fullscreen = mkDefault false;
+        background-color = mkDefault "rgb(255,255,255)";
         background-opacity = mkDefault 0.25;
         click-action = mkDefault "minimize-or-previews";
+        custom-background-color = mkDefault false;
+        custom-theme-customize-running-dots = mkDefault false;
+        custom-theme-running-dots-border-color = mkDefault "rgb(255,255,255)";
+        custom-theme-running-dots-border-width = mkDefault 0;
+        custom-theme-running-dots-color = mkDefault "rgb(53,132,228)";
         custom-theme-shrink = mkDefault false;
         dash-max-icon-size = mkDefault 48;
         dock-fixed = mkDefault false;
@@ -49,6 +55,7 @@ in
         multi-monitor = mkDefault true;
         preferred-monitor = mkDefault (-2); # active/focused monitor (dynamic)
         #preferred-monitor-by-connector = mkDefault "eDP-1";
+        running-indicator-dominant-color = mkDefault false;
         running-indicator-style = mkDefault "DASHES";
         shift-click-action = mkDefault "minimize";
         shift-middle-click-action = mkDefault "launch";
