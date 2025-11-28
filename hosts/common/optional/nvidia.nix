@@ -18,8 +18,9 @@ in
 {
   # https://nixos.org/manual/nixos/stable/
   # https://wiki.nixos.org/wiki/Graphics
-  # https://wiki.nixos.org/wiki/NVIDIA
-  # https://nixos.wiki/wiki/Nvidia
+  imports = [
+    ./graphics.nix
+  ];
 
   # Options
   options.features.nvidia = {
@@ -95,6 +96,8 @@ in
     };
   };
 
+  # https://wiki.nixos.org/wiki/NVIDIA
+  # https://nixos.wiki/wiki/Nvidia
   config = mkIf cfg.enable {
     # Xorg driver choice depends on the PRIME mode
     services.xserver.videoDrivers =
@@ -106,61 +109,51 @@ in
       else
         [ "nvidia" ]; # sync/none: NVIDIA is primary
 
-    hardware = {
-      graphics = {
-        # Usually defined by desktop environments
-        enable = true;
+    hardware.nvidia = {
+      # Since driver version 560, must decide on open-source or proprietary modules
+      # - for Turing generations -> use open kernel module
+      # - for older GPUs override to false for that host
+      open = cfg.driver.open;
 
-        # 32-bit libs  (OpenGL/Vulkan) for older games, Wine, Steam, etc.
-        enable32Bit = mkDefault true;
+      # Kernel modesetting (KMS), helpful for Wayland
+      modesetting.enable = mkDefault true;
+
+      # NVIDIA's GUI configuration tool
+      nvidiaSettings = mkDefault true;
+
+      # stable driver by default, could override for legacy drivers
+      package = mkDefault config.boot.kernelPackages.nvidiaPackages.stable;
+
+      powerManagement = {
+        # useful for laptops
+        enable = mkDefault true;
+        # can cause resume/suspend issues or glitches
+        finegrained = mkDefault false;
       };
 
-      nvidia = {
-        # Since driver version 560, must decide on open-source or proprietary modules
-        # - for Turing generations -> use open kernel module
-        # - for older GPUs override to false for that host
-        open = cfg.driver.open;
+      # Optimus PRIME config
+      prime = mkIf (cfg.primeMode != "none") (mkMerge [
+        {
+          nvidiaBusId = cfg.nvidiaBusId;
+        }
 
-        # Kernel modesetting (KMS), helpful for Wayland
-        modesetting.enable = mkDefault true;
+        # Route iGPU bus ID to the correct option
+        (mkIf (cfg.igpu.type == "intel") {
+          intelBusId = cfg.igpu.busId;
+        })
+        (mkIf (cfg.igpu.type == "amd") {
+          amdgpuBusId = cfg.igpu.busId;
+        })
 
-        # NVIDIA's GUI configuration tool
-        nvidiaSettings = mkDefault true;
-
-        # stable driver by default, could override for legacy drivers
-        package = mkDefault config.boot.kernelPackages.nvidiaPackages.stable;
-
-        powerManagement = {
-          # useful for laptops
-          enable = mkDefault true;
-          # can cause resume/suspend issues or glitches
-          finegrained = mkDefault false;
-        };
-
-        # Optimus PRIME config
-        prime = mkIf (cfg.primeMode != "none") (mkMerge [
-          {
-            nvidiaBusId = cfg.nvidiaBusId;
-          }
-
-          # Route iGPU bus ID to the correct option
-          (mkIf (cfg.igpu.type == "intel") {
-            intelBusId = cfg.igpu.busId;
-          })
-          (mkIf (cfg.igpu.type == "amd") {
-            amdgpuBusId = cfg.igpu.busId;
-          })
-
-          # Mode-specific bits
-          (mkIf (cfg.primeMode == "offload") {
-            offload.enable = true;
-            offload.enableOffloadCmd = true;
-          })
-          (mkIf (cfg.primeMode == "sync") {
-            sync.enable = true;
-          })
-        ]);
-      };
+        # Mode-specific bits
+        (mkIf (cfg.primeMode == "offload") {
+          offload.enable = true;
+          offload.enableOffloadCmd = true;
+        })
+        (mkIf (cfg.primeMode == "sync") {
+          sync.enable = true;
+        })
+      ]);
     };
   };
 }
