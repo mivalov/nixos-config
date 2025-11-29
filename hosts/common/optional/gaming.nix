@@ -31,6 +31,10 @@
       # Enabling it might be an overkill for most cases, instead if you only need
       # the wrapper, you could simply add to `environment.systemPackages` or `home.packages` (HM)
       gamescopeSession.enable = lib.mkDefault false;
+
+      extraPackages = with pkgs; [
+        adwaita-icon-theme
+      ];
     };
   };
 
