@@ -9,6 +9,7 @@
     ../common/global
     ../common/optional/gnome.nix
     ../common/optional/nvidia.nix
+    ../common/optional/gaming.nix
     ../common/users/mvalov
     ./configuration.nix
   ];
