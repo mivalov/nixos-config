@@ -18,5 +18,6 @@
     google-chrome
     discord
     viber
+    signal-desktop
   ];
 }
