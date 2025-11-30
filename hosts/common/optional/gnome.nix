@@ -7,7 +7,7 @@
 {
   # https://wiki.nixos.org/wiki/GNOME
   # Enable the GNOME Desktop Environment.
-  services.xserver = {
+  services = {
     # GNOME Display Manager (GDM)
     displayManager.gdm = {
       enable = lib.mkDefault true;

@@ -18,7 +18,7 @@
 
     packages = [
       # Install the CLI from the HM input (matches module exactly)
-      inputs.home-manager.packages.${pkgs.system}.home-manager
+      inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
     ];
   };
 }
