@@ -55,6 +55,13 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
+  # this is to fix dead keys (e.g. "^") on german keyboard layout
+  i18n.inputMethod = {
+    enable = true;
+    type = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [ anthy ];
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
