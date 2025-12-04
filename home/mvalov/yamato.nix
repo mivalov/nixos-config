@@ -12,6 +12,7 @@
     ../common/optional/gnome
     ../common/optional/gaming
     ../common/optional/joplin.nix
+    ../common/optional/keepassxc.nix
   ];
 
   home.packages = with pkgs; [
