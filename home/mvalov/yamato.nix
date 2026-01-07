@@ -20,5 +20,6 @@
     discord
     viber
     signal-desktop
+    rustdesk-flutter
   ];
 }

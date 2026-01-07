@@ -22,6 +22,7 @@ in
     google-chrome
     discord
     signal-desktop
+    rustdesk-flutter
   ];
 
   dconf.settings = {
