@@ -44,6 +44,9 @@ in
         ])
       ];
     };
+    "org/gnome/desktop/interface" = {
+      color-scheme = "default";
+    };
     "system/locale" = {
       region = "bg_BG.UTF-8";
     };
