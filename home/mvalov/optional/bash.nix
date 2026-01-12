@@ -15,7 +15,7 @@ let
   defaultPS1 = lib.concatStrings [
     ''''${RESET}\[\e]0;\u@\h: \w\a\]''
     ''''${BRIGHT_GREEN}\u@\H''
-    ''''${RESET}:''
+    "\${RESET}:"
     ''''${BRIGHT_BLUE}\w''
     ''''${RESET}:$(git_branch_status)\n\\$ ''
   ];
