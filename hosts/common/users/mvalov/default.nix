@@ -15,7 +15,9 @@ in
     isNormalUser = true;
     description = "Miroslav Valov";
     extraGroups = ifTheyExist [
+      "docker"
       "networkmanager"
+      "podman"
       "wheel"
     ];
     # TODO: password, initialhashedPassword or hashedPasswordFile??
