@@ -67,6 +67,9 @@ sudo nixos-rebuild switch --flake .#<host>
 # List available generations
 nixos-rebuild list-generations
 
+# Alternative command to list available generations
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+
 # View all available historical versions
 nix profile history --profile /nix/var/nix/profiles/system
 
