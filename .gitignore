@@ -1,0 +1,16 @@
+# Editor folders
+.idea/
+.vscode/
+
+# Build results from `nix-build` or `nix build`
+result
+result-*
+
+# Logs
+*.log
+
+# Auto-generated direnv output
+.direnv
+
+# mac
+.DS_Store
