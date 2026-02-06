@@ -23,5 +23,6 @@
     viber
     signal-desktop
     rustdesk-flutter
+    bruno
   ];
 }
