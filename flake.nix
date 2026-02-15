@@ -73,8 +73,14 @@
       #homeConfigurations = {
       #  "mvalov@work-laptop" = inputs.home-manager.lib.homeManagerConfiguration {
       #    pkgs = pkgsFor."x86_64-linux";
-      #    modules = [ ./home/mvalov/work-laptop.nix ./home/mvalov/nixpkgs.nix ];
-      #    extraSpecialArgs = { hostName = "work-laptop"; };
+      #    modules = [
+      #      ./home/mvalov/work-laptop.nix
+      #      ./home/mvalov/nixpkgs.nix
+      #    ];
+      #    extraSpecialArgs = {
+      #      hostName = "work-laptop";
+      #    };
       #  };
+      #};
     };
 }
