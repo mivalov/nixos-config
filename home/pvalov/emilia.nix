@@ -48,6 +48,19 @@ in
     "org/gnome/desktop/interface" = {
       color-scheme = "default";
     };
+    "org/gnome/shell" = {
+      favorite-apps = [
+        "google-chrome.desktop"
+        "org.gnome.Console.desktop"
+        "discord.desktop"
+        "signal.desktop"
+        "joplin.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+        "rustdesk.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.gnome.Settings.desktop"
+      ];
+    };
     "system/locale" = {
       region = "bg_BG.UTF-8";
     };

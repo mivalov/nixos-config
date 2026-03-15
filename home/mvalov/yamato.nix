@@ -36,9 +36,9 @@
         "signal.desktop"
         "steam.desktop"
         "com.heroicgameslauncher.hgl.desktop"
-        "rustdesk.desktop"
-        "org.keepassxc.KeePassXC.desktop"
         "joplin.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+        "rustdesk.desktop"
         "org.gnome.Nautilus.desktop"
         "org.gnome.Settings.desktop"
       ];
