@@ -21,10 +21,11 @@ in
   ];
 
   home.packages = with pkgs; [
-    google-chrome
     discord
-    signal-desktop
+    google-chrome
     rustdesk-flutter
+    signal-desktop
+    vlc
   ];
 
   dconf.settings = {

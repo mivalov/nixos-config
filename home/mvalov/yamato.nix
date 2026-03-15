@@ -18,12 +18,13 @@
   ];
 
   home.packages = with pkgs; [
-    google-chrome
-    discord
-    viber
-    signal-desktop
-    rustdesk-flutter
     bruno
+    discord
+    google-chrome
+    rustdesk-flutter
+    signal-desktop
+    viber
+    vlc
   ];
 
   dconf.settings = {
