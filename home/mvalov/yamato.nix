@@ -25,4 +25,22 @@
     rustdesk-flutter
     bruno
   ];
+
+  dconf.settings = {
+    "org/gnome/shell" = {
+      favorite-apps = [
+        "google-chrome.desktop"
+        "org.gnome.Console.desktop"
+        "discord.desktop"
+        "signal.desktop"
+        "steam.desktop"
+        "com.heroicgameslauncher.hgl.desktop"
+        "rustdesk.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+        "joplin.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.gnome.Settings.desktop"
+      ];
+    };
+  };
 }
