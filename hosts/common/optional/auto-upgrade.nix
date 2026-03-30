@@ -145,8 +145,14 @@ in
       timerConfig.OnBootSec = lib.mkDefault cfg.onBootDelay;
     };
 
-    # In case of errors (repository path not owned by current user) -> mark repo as safe
-    # https://git-scm.com/docs/git-config#Documentation/git-config.txt-safedirectory
-    programs.git.config.safe.directory = [ "${cfg.flakePath}" ];
+    programs.git = {
+      # In order to configure git, it must first be enabled
+      enable = true;
+      config = {
+        # In case of errors (repository path not owned by current user) -> mark repo as safe
+        # https://git-scm.com/docs/git-config#Documentation/git-config.txt-safedirectory
+        safe.directory = [ "${cfg.flakePath}" ];
+      };
+    };
   };
 }
