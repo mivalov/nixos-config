@@ -104,8 +104,8 @@ in
 
     # Extend the existing nixos-upgrade service
     systemd.services.nixos-upgrade = {
-      # https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
       # Ensure network is available before starting the service
+      # https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       # https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeShellApplication
@@ -145,7 +145,8 @@ in
       timerConfig.OnBootSec = lib.mkDefault cfg.onBootDelay;
     };
 
-    # In case of errors/warnings, mark repo as safe
-    #programs.git.config.safe.directory = [ (toString cfg.flakePath) ];
+    # In case of errors (repository path not owned by current user) -> mark repo as safe
+    # https://git-scm.com/docs/git-config#Documentation/git-config.txt-safedirectory
+    programs.git.config.safe.directory = [ "${cfg.flakePath}" ];
   };
 }
