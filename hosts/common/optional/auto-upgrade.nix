@@ -39,26 +39,29 @@ in
       description = ''
         How often or when the service is triggered, used for the systemd timer.
         The format is described in {manpage}`systemd.time(7)`.
+        Note: This acts as a logical OR with the 'onBootDelay' option.
       '';
     };
 
     onBootDelay = lib.mkOption {
       # https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
       type = lib.types.str;
-      default = "3min";
+      default = "-1";
       example = "5min";
       description = ''
         Add a fixed on-boot delay before each automatic system upgrade.
         The delay is useful to let the OS finish loading services.
+        Set to '-1' to disable the option entirely.
         This value must be a time span in the format specified by
         {manpage}`systemd.time(7)`.
+        Note: This acts as a logical OR with the 'dates' option.
       '';
     };
 
     randomizedDelaySec = lib.mkOption {
       # https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
       type = lib.types.str;
-      default = "0";
+      default = "3min";
       example = "5min";
       description = ''
         Add a randomized delay before each automatic system upgrade.
@@ -104,7 +107,7 @@ in
 
     # Extend the existing nixos-upgrade service
     systemd.services.nixos-upgrade = {
-      # Ensure network is available before starting the service
+      # Ensure network is available before starting the service (including prerequisites)
       # https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -128,10 +131,10 @@ in
                 REV=$(sudo -u ${cfg.user} git -C "${cfg.flakePath}" rev-parse HEAD)
                 echo "Git Pull: SUCCESS"
                 echo "Revision: ''${REV}"
-                echo "NixOS Rebuild: Starting..."
+                echo "NixOS Rebuild: Started."
               else
                 echo "Git Pull: FAILED"
-                echo "NixOS Rebuild: Skipping."
+                echo "NixOS Rebuild: Skipped."
                 exit 1
               fi
             } > "$STATUS_FILE"
@@ -142,7 +145,7 @@ in
 
     systemd.timers.nixos-upgrade = {
       # https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html
-      timerConfig.OnBootSec = lib.mkDefault cfg.onBootDelay;
+      timerConfig.OnBootSec = lib.mkIf (cfg.onBootDelay != "-1") (lib.mkDefault cfg.onBootDelay);
     };
 
     programs.git = {
