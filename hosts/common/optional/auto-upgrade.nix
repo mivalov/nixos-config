@@ -137,7 +137,7 @@ in
                 echo "NixOS Rebuild: Skipped."
                 exit 1
               fi
-            } > "$STATUS_FILE"
+            } | tee "$STATUS_FILE"
           '';
         }
       );
