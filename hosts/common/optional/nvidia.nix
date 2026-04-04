@@ -41,14 +41,24 @@ in
             - "none": no iGPU or not used
         '';
       };
+
+      # https://mynixos.com/nixpkgs/option/hardware.nvidia.prime.intelBusId
+      # https://mynixos.com/nixpkgs/option/hardware.nvidia.prime.amdgpuBusId
       busId = mkOption {
         type = types.str;
         default = "";
         example = "PCI:0:2:0";
         description = ''
-          PCI bus ID of the integrated GPU (iGPU), in "PCI:BUS:DEVICE:FUNCTION" format.
-          Get it via: lspci | grep -i 'vga'
-          alternatively: nix run nixpkgs#pciutils -- -mm | grep -i vga
+          PCI bus ID of the integrated GPU (iGPU), in one of the following formats:
+            - "PCI:BUS:DEVICE:FUNCTION"
+            - "PCI:BUS@DOMAIN:DEVICE:FUNCTION"
+          Get it via one of the following commands:
+            - `lspci -D | grep -i 'vga'`
+            - `nix run nixpkgs#pciutils -- -mm -D | grep -i vga`
+            - `nix shell nixpkgs#pciutils -c lspci -D -d ::03xx`
+          Note that lspci reports hexadecimal address, while the option expects decimal address
+          Then convert: "<domain>:<bus>:<device>.<func>" -> "PCI:<bus>@<domain>:<device>:<func>"
+          e.g. "0001:02:03.4" -> "PCI:2@1:3:4"
         '';
       };
     };
@@ -69,14 +79,22 @@ in
       '';
     };
 
+    # https://mynixos.com/nixpkgs/option/hardware.nvidia.prime.nvidiaBusId
     nvidiaBusId = mkOption {
       type = types.str;
       default = "";
       example = "PCI:1:0:0";
       description = ''
-        PCI bus ID of the NVIDIA GPU, in "PCI:BUS:DEVICE:FUNCTION" format.
-        Get it via: lspci | grep -i 'vga'
-        alternatively: nix run nixpkgs#pciutils -- -mm | grep -i vga
+        PCI bus ID of the NVIDIA GPU, in one of the following formats:
+          - "PCI:BUS:DEVICE:FUNCTION"
+          - "PCI:BUS@DOMAIN:DEVICE:FUNCTION"
+        Get it via one of the following commands:
+          - `lspci -D | grep -i 'vga'`
+          - `nix run nixpkgs#pciutils -- -mm -D | grep -i vga`
+          - `nix shell nixpkgs#pciutils -c lspci -D -d ::03xx`
+        Note that lspci reports hexadecimal address, while the option expects decimal address
+        Then convert: "<domain>:<bus>:<device>.<func>" -> "PCI:<bus>@<domain>:<device>:<func>"
+        e.g. "0001:02:03.4" -> "PCI:2@1:3:4"
       '';
     };
 
@@ -101,7 +119,7 @@ in
   config = mkIf cfg.enable {
     # Xorg driver choice depends on the PRIME mode
     services.xserver.videoDrivers =
-      if cfg.primeMode == "offload" then
+      if (cfg.primeMode == "offload" && cfg.igpu.type != "none") then
         [
           (if cfg.igpu.type == "amd" then "amdgpu" else "modesetting")
           "nvidia"

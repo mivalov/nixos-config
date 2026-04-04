@@ -16,10 +16,11 @@
   ];
 
   features.nvidia = {
+    # before editing, check the options and docs
     enable = true;
     primeMode = "sync";
     igpu.type = "intel";
-    igpu.busId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
+    igpu.busId = "PCI:0@0:2:0"; # 0000:00:02.0
+    nvidiaBusId = "PCI:1@0:0:0"; # 0000:01:00.0
   };
 }
