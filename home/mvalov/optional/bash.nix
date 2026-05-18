@@ -32,6 +32,9 @@ in
     };
 
     gitPrompt = {
+      # https://mtlynch.io/notes/nix-git-bash-shell/
+      # https://jeffkreeftmeijer.com/nix-home-manager-git-prompt/
+      # https://unix.stackexchange.com/questions/686346/how-to-keep-ps1-when-using-nix-shell
       showDirtyState = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -63,6 +66,16 @@ in
         description = "Bash color variable used for a clean git branch state.";
       };
     };
+
+    coloredManPages = {
+      # https://www.youtube.com/watch?v=D0sG2fj0G4Y
+      # https://gist.github.com/bahamas10/542875bb47990933638d2b7dfaa501bf
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Adds colors to manual pages";
+      };
+    };
   };
 
   config = {
@@ -78,10 +91,53 @@ in
       };
       #shellOptions = lib.mkDefault [];
 
-      # https://mtlynch.io/notes/nix-git-bash-shell/
-      # https://jeffkreeftmeijer.com/nix-home-manager-git-prompt/
-      # https://unix.stackexchange.com/questions/686346/how-to-keep-ps1-when-using-nix-shell
       initExtra = ''
+        ${
+          if config.features.bash.coloredManPages.enable then
+            ''
+              # Disable groff SGR for better color control
+              #export GROFF_NO_SGR=1
+              # Alternative, but only restricted to man
+              # https://bbs.archlinux.org/viewtopic.php?id=287185
+              export MANROFFOPT=-c
+
+              # Define custom colors for man pages (man terminfo/tput)
+              # Start blinking mode (often used for special warnings) -> magenta
+              export LESS_TERMCAP_mb=$(tput bold; tput setaf 5)
+              # Start bold mode (section headers and command names) -> cyan
+              export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
+              # Start standout mode (search results and the bottom status bar) -> black on yellow
+              export LESS_TERMCAP_so=$(tput bold; tput setaf 0; tput setab 3)
+              # Start underline mode (usually for variables and file paths) -> bold green with underline
+              export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)
+
+              # End all special formatting (reset color/bold/underline back to normal)
+              export LESS_TERMCAP_me=$(tput sgr0)
+              # End standout mode (reset search highlight/status bar)
+              export LESS_TERMCAP_se=$(tput sgr0)
+              # End underline mode (reset the underline effect)
+              export LESS_TERMCAP_ue=$(tput sgr0)
+
+              # Start reverse-video mode (swaps foreground and background colors)
+              export LESS_TERMCAP_mr=$(tput rev)
+              # Start dim/half-bright mode (dims the text color)
+              export LESS_TERMCAP_mh=$(tput dim)
+
+              # Start subscript mode (probably not supported)
+              export LESS_TERMCAP_ZN=$(tput ssubm)
+              # End subscript mode (probably not supported)
+              export LESS_TERMCAP_ZV=$(tput rsubm)
+              # Start superscript mode (probably not supported)
+              export LESS_TERMCAP_ZO=$(tput ssupm)
+              # End superscript mode (probably not supported)
+              export LESS_TERMCAP_ZW=$(tput rsupm)
+
+              # Wire up `man` to use `less` (usually the default)
+              export MANPAGER='less'
+            ''
+          else
+            ""
+        }
         # Load __git_ps1 bash command
         if [ -r ${gitPromptPath} ]; then
           . ${gitPromptPath}
