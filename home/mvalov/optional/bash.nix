@@ -19,6 +19,30 @@ let
     ''''${BRIGHT_BLUE}\w''
     ''''${RESET}:$(git_branch_status)\n\\$ ''
   ];
+
+  # ANSI escape themes
+  ansi_themes = {
+    cyan = {
+      md = "1;36"; # headers: bold cyan
+      us = "1;4;32"; # vars/paths: bold underline green
+      so = "1;30;43"; # search/status: bold black on yellow background
+      mb = "1;35"; # blink/warnings: bold magenta
+    };
+    red = {
+      md = "1;31"; # headers: bold red
+      us = "1;4;33"; # vars/paths: bold underline yellow
+      so = "1;30;42"; # search/status: bold black on green background
+      mb = "1;35"; # blink/warnings: bold magenta
+    };
+    white = {
+      md = "1;37"; # headers: bold white
+      us = "1;4;37"; # vars/paths: bold underline white
+      so = "7"; # search/status: reverse video (black on white background)
+      mb = "1;37"; # blink/warnings: bold white
+    };
+  };
+
+  ansi_theme = ansi_themes.${cfg.coloredManPages.theme};
 in
 {
   options.features.bash = {
@@ -73,7 +97,16 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Adds colors to manual pages";
+        description = "Adds colors to manual pages.";
+      };
+      theme = lib.mkOption {
+        type = lib.types.enum [
+          "cyan"
+          "red"
+          "white"
+        ];
+        default = "cyan";
+        description = "Color theme to use for manual pages.";
       };
     };
   };
@@ -102,35 +135,26 @@ in
               export MANROFFOPT=-c
 
               # Define custom colors for man pages (man terminfo/tput)
-              # Start blinking mode (often used for special warnings) -> magenta
-              export LESS_TERMCAP_mb=$(tput bold; tput setaf 5)
-              # Start bold mode (section headers and command names) -> cyan
-              export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
-              # Start standout mode (search results and the bottom status bar) -> black on yellow
-              export LESS_TERMCAP_so=$(tput bold; tput setaf 0; tput setab 3)
-              # Start underline mode (usually for variables and file paths) -> bold green with underline
-              export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)
+              # Start blinking mode (often used for special warnings)
+              export LESS_TERMCAP_mb=$'\e[${ansi_theme.mb}m'
+              # Start bold mode (section headers and command names)
+              export LESS_TERMCAP_md=$'\e[${ansi_theme.md}m'
+              # Start standout mode (search results and the bottom status bar)
+              export LESS_TERMCAP_so=$'\e[${ansi_theme.so}m'
+              # Start underline mode (usually for variables and file paths)
+              export LESS_TERMCAP_us=$'\e[${ansi_theme.us}m'
 
               # End all special formatting (reset color/bold/underline back to normal)
-              export LESS_TERMCAP_me=$(tput sgr0)
+              export LESS_TERMCAP_me=$'\e[0m'
               # End standout mode (reset search highlight/status bar)
-              export LESS_TERMCAP_se=$(tput sgr0)
+              export LESS_TERMCAP_se=$'\e[0m'
               # End underline mode (reset the underline effect)
-              export LESS_TERMCAP_ue=$(tput sgr0)
+              export LESS_TERMCAP_ue=$'\e[0m'
 
               # Start reverse-video mode (swaps foreground and background colors)
-              export LESS_TERMCAP_mr=$(tput rev)
+              export LESS_TERMCAP_mr=$'\e[7m'
               # Start dim/half-bright mode (dims the text color)
-              export LESS_TERMCAP_mh=$(tput dim)
-
-              # Start subscript mode (probably not supported)
-              export LESS_TERMCAP_ZN=$(tput ssubm)
-              # End subscript mode (probably not supported)
-              export LESS_TERMCAP_ZV=$(tput rsubm)
-              # Start superscript mode (probably not supported)
-              export LESS_TERMCAP_ZO=$(tput ssupm)
-              # End superscript mode (probably not supported)
-              export LESS_TERMCAP_ZW=$(tput rsupm)
+              export LESS_TERMCAP_mh=$'\e[2m'
 
               # Wire up `man` to use `less` (usually the default)
               export MANPAGER='less'
