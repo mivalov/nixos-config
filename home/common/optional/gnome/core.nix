@@ -16,6 +16,11 @@ in
     # dump settings with: dconf dump / > "$(date +'%FT%H-%M')-gnome.dconf"
     # convert settings with: dconf2nix -i input.dconf -o output.nix
     settings = {
+      "org/gnome/Console" = {
+        audible-bell = mkDefault false;
+        visual-bell = mkDefault true;
+      };
+
       "org/gnome/desktop/calendar" = {
         show-weekdate = mkDefault true;
       };
