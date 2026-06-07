@@ -8,6 +8,10 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     #    disko = {
     #      url = "github:nix-community/disko";
     #      inputs.nixpkgs.follows = "nixpkgs"
