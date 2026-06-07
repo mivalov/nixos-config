@@ -13,6 +13,7 @@
     ../common/optional/fonts.nix
     ../common/optional/office.nix
     ../common/optional/gaming
+    ../common/optional/nvf
     ../common/optional/joplin.nix
     ../common/optional/keepassxc.nix
     ../common/optional/zed-editor.nix
