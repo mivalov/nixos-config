@@ -12,6 +12,9 @@
   ];
 
   nixpkgs = {
+    overlays = [
+      outputs.overlays.unstablePackages
+    ];
     config = {
       # Allow unfree packages
       allowUnfree = lib.mkDefault true;
