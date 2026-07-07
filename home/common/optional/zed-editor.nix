@@ -17,7 +17,7 @@
       autosave = lib.mkDefault "on_focus_change";
       auto_update = lib.mkDefault false;
       base_keymap = lib.mkDefault "JetBrains";
-      buffer_font_family = lib.mkDefault ".ZedMono";
+      buffer_font_family = lib.mkDefault "JetBrainsMono Nerd Font Mono";
       buffer_font_size = lib.mkDefault 14.0;
       agent_buffer_font_size = lib.mkDefault 14.0;
       buffer_line_height = lib.mkDefault "comfortable";
@@ -29,11 +29,11 @@
         diagnostics = lib.mkDefault false;
         metrics = lib.mkDefault false;
       };
-      # theme = {
-      #   mode = lib.mkDefault "system";
-      #   light = lib.mkDefault "JetBrains Light";
-      #   dark = lib.mkDefault "JetBrains Islands Dark";
-      # };
+      theme = {
+        mode = lib.mkDefault "system";
+        light = lib.mkDefault "JetBrains Light";
+        dark = lib.mkDefault "JetBrains Islands Dark";
+      };
     };
 
     extensions = [
