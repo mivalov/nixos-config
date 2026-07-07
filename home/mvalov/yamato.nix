@@ -33,6 +33,7 @@
       favorite-apps = [
         "google-chrome.desktop"
         "org.gnome.Console.desktop"
+        "dev.zed.Zed.desktop"
         "discord.desktop"
         "signal.desktop"
         "steam.desktop"
