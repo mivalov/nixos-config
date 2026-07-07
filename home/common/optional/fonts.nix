@@ -52,6 +52,15 @@ in
       description = "Enables metric-compatible alternative to Cambria (Google Caladea)";
     };
 
+    enableJetBrainsMono = lib.mkOption {
+      # https://github.com/jetbrains/jetbrainsmono
+      # https://www.nerdfonts.com/
+      type = lib.types.bool;
+      default = true;
+      example = false;
+      description = "Enables JetBrains Mono font (Nerd Fonts)";
+    };
+
     extraFonts = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
@@ -73,6 +82,7 @@ in
       ++ (lib.optional cfg.enableLiberation pkgs.liberation_ttf)
       ++ (lib.optional cfg.enableCarlito pkgs.carlito)
       ++ (lib.optional cfg.enableCaladea pkgs.caladea)
+      ++ (lib.optional cfg.enableJetBrainsMono pkgs.nerd-fonts.jetbrains-mono)
       ++ cfg.extraFonts;
   };
 }
