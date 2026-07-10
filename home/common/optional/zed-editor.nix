@@ -4,6 +4,7 @@
   ...
 }:
 {
+  # https://wiki.nixos.org/wiki/Zed
   programs.zed-editor = {
     enable = lib.mkDefault true;
     package = lib.mkDefault pkgs.unstable.zed-editor;
@@ -12,6 +13,20 @@
     mutableUserKeymaps = lib.mkDefault true;
     mutableUserTasks = lib.mkDefault true;
     mutableUserDebug = lib.mkDefault true;
+    extensions = [
+      # https://github.com/zed-industries/extensions/tree/main/extensions
+      "catppuccin"
+      "git-firefly"
+      "html"
+      "jetbrains-themes"
+      "nix"
+      "toml"
+    ];
+
+    extraPackages = with pkgs; [
+      nixd
+      nixfmt
+    ];
 
     userSettings = {
       autosave = lib.mkDefault "on_focus_change";
@@ -25,25 +40,45 @@
       ui_font_family = lib.mkDefault "Adwaita Sans";
       ui_font_size = lib.mkDefault 16.0;
       agent_ui_font_size = lib.mkDefault 16.0;
+
       telemetry = {
         diagnostics = lib.mkDefault false;
         metrics = lib.mkDefault false;
       };
+
       theme = {
         mode = lib.mkDefault "system";
         light = lib.mkDefault "JetBrains Light";
         dark = lib.mkDefault "JetBrains Islands Dark";
       };
+
+      languages = {
+        Nix = {
+          language_servers = [
+            "nixd"
+            "!nil"
+          ];
+          formatter = lib.mkDefault "language_server";
+          format_on_save = lib.mkDefault "on";
+        };
+      };
+
+      lsp = {
+        nixd.settings.nixd.formatting.command = [ "nixfmt" ];
+      };
     };
 
-    extensions = [
-      # https://github.com/zed-industries/extensions/tree/main/extensions
-      "catppuccin"
-      "git-firefly"
-      "html"
-      "jetbrains-themes"
-      "nix"
-      "toml"
+    # https://zed.dev/docs/key-bindings
+    userKeymaps = [
+      {
+        context = "Editor";
+        bindings = {
+          "ctrl-#" = [
+            "editor::ToggleComments"
+            { advance_downwards = true; }
+          ];
+        };
+      }
     ];
   };
 }
