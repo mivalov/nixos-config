@@ -53,6 +53,11 @@
       };
 
       languages = {
+        Markdown = {
+          formatter = lib.mkDefault "language_server";
+          tab_size = lib.mkDefault 4;
+          hard_tabs = lib.mkDefault false;
+        };
         Nix = {
           language_servers = [
             "nixd"
