@@ -40,6 +40,7 @@
       buffer_font_size = lib.mkDefault 14.0;
       buffer_line_height = lib.mkDefault "comfortable";
       disable_ai = lib.mkDefault true;
+      format_on_save = lib.mkDefault "off";
       mouse_wheel_zoom = lib.mkDefault true;
       ui_font_family = lib.mkDefault "Adwaita Sans";
       ui_font_size = lib.mkDefault 16.0;
