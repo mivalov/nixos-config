@@ -27,6 +27,7 @@
     extraPackages = with pkgs; [
       nixd
       nixfmt
+      package-version-server
     ];
 
     userSettings = {
@@ -85,6 +86,7 @@
 
       lsp = {
         nixd.settings.nixd.formatting.command = [ "nixfmt" ];
+        package-version-server.binary.path = lib.mkDefault "package-version-server";
       };
     };
 
