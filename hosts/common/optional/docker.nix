@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ ... }:
 {
   # https://wiki.nixos.org/wiki/Docker
   # https://nixos.wiki/wiki/Docker

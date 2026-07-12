@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
-  inherit (lib.hm.gvariant) mkInt32;
+  # inherit (lib.hm.gvariant) mkInt32;
   inherit (lib) mkDefault;
 in
 {
