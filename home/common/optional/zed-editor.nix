@@ -70,16 +70,17 @@
 
       languages = {
         Markdown = {
-          tab_size = lib.mkDefault 4;
+          format_on_save = lib.mkDefault "off";
           hard_tabs = lib.mkDefault false;
+          tab_size = lib.mkDefault 2;
         };
         Nix = {
+          formatter = lib.mkDefault "language_server";
+          format_on_save = lib.mkDefault "off";
           language_servers = [
             "nixd"
             "!nil"
           ];
-          formatter = lib.mkDefault "language_server";
-          format_on_save = lib.mkDefault "on";
         };
       };
 
