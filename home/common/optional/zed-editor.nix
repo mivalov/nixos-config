@@ -96,6 +96,7 @@
       {
         context = "Editor";
         bindings = {
+          "ctrl-alt-g" = "editor::SplitSelectionIntoLines";
           "ctrl-y" = "editor::Redo";
           "ctrl-#" = [
             "editor::ToggleComments"
