@@ -4,6 +4,12 @@
   ...
 }:
 {
+  # https://panache.bz/guide/configuration.html
+  xdg.configFile."panache/config.toml".text = lib.mkDefault ''
+    [extensions]
+    alerts = true
+  '';
+
   # https://wiki.nixos.org/wiki/Zed
   programs.zed-editor = {
     enable = lib.mkDefault true;
@@ -21,6 +27,7 @@
       "html"
       "jetbrains-themes"
       "nix"
+      "panache-language-server"
       "toml"
     ];
 
@@ -28,6 +35,7 @@
       nixd
       nixfmt
       package-version-server
+      panache
     ];
 
     userSettings = {
@@ -71,8 +79,10 @@
 
       languages = {
         Markdown = {
+          document_folding_ranges = lib.mkDefault "on";
           format_on_save = lib.mkDefault "off";
           hard_tabs = lib.mkDefault false;
+          language_servers = [ "panache-language-server" ];
           tab_size = lib.mkDefault 2;
         };
         Nix = {
@@ -85,9 +95,16 @@
         };
       };
 
+      # https://zed.dev/docs/configuring-languages
       lsp = {
+        # https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md
         nixd.settings.nixd.formatting.command = [ "nixfmt" ];
         package-version-server.binary.path = lib.mkDefault "package-version-server";
+        # https://panache.bz/guide/lsp.html
+        panache-language-server.binary = {
+          path = lib.mkDefault "panache";
+          arguments = [ "lsp" ];
+        };
       };
     };
 
