@@ -109,16 +109,35 @@
     };
 
     # https://zed.dev/docs/key-bindings
+    # Disable/Unbind keymaps:
+    #  - "keymap" = null; -> disable keymap in a specific context
+    #  - unbind = {"keymap" = "action"}; -> disable keymap in a specific context for a specific action
     userKeymaps = [
       {
         context = "Editor";
         bindings = {
-          "ctrl-alt-g" = "editor::SplitSelectionIntoLines";
-          "ctrl-y" = "editor::Redo";
           "ctrl-#" = [
             "editor::ToggleComments"
             { advance_downwards = true; }
           ];
+          "ctrl-*" = "editor::FoldAll";
+          "ctrl-_" = "editor::UnfoldAll";
+          "ctrl-alt-g" = "editor::SplitSelectionIntoLines";
+          "ctrl-shift-+" = "editor::FoldAll";
+          "ctrl-shift--" = "editor::UnfoldAll";
+          "ctrl-y" = "editor::Redo";
+        };
+      }
+      {
+        context = "Editor && mode == full";
+        bindings = {
+          "ctrl-alt-w" = "editor::ToggleSoftWrap";
+        };
+      }
+      {
+        context = "Workspace";
+        unbind = {
+          "ctrl-k" = "git_panel::ToggleFocus";
         };
       }
     ];
