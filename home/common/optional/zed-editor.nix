@@ -120,11 +120,11 @@
             "editor::ToggleComments"
             { advance_downwards = true; }
           ];
-          "ctrl-*" = "editor::FoldAll";
-          "ctrl-_" = "editor::UnfoldAll";
+          "ctrl-*" = "editor::UnfoldAll";
+          "ctrl-_" = "editor::FoldAll";
           "ctrl-alt-g" = "editor::SplitSelectionIntoLines";
-          "ctrl-shift-+" = "editor::FoldAll";
-          "ctrl-shift--" = "editor::UnfoldAll";
+          "ctrl-shift-+" = "editor::UnfoldAll";
+          "ctrl-shift--" = "editor::FoldAll";
           "ctrl-y" = "editor::Redo";
         };
       }
