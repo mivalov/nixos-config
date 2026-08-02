@@ -38,38 +38,31 @@
       panache
     ];
 
+    # https://zed.dev/docs/reference/all-settings
     userSettings = {
-      agent_buffer_font_size = lib.mkDefault 14.0;
-      agent_ui_font_size = lib.mkDefault 16.0;
+      # Editor behaviour
       autosave = lib.mkDefault "on_focus_change";
       auto_update = lib.mkDefault false;
       base_keymap = lib.mkDefault "JetBrains";
-      buffer_font_family = lib.mkDefault "JetBrainsMono Nerd Font Mono";
-      buffer_font_size = lib.mkDefault 14.0;
-      buffer_line_height = lib.mkDefault "comfortable";
       disable_ai = lib.mkDefault true;
       format_on_save = lib.mkDefault "off";
       mouse_wheel_zoom = lib.mkDefault true;
+
+      # https://zed.dev/docs/appearance
+      # Fonts
+      agent_buffer_font_size = lib.mkDefault 14.0;
+      agent_ui_font_size = lib.mkDefault 16.0;
+      buffer_font_family = lib.mkDefault "JetBrainsMono Nerd Font Mono";
+      buffer_font_size = lib.mkDefault 14.0;
+      buffer_line_height = lib.mkDefault "comfortable";
       ui_font_family = lib.mkDefault "Adwaita Sans";
       ui_font_size = lib.mkDefault 16.0;
 
-      git_panel = {
-        dock = lib.mkDefault "left";
-      };
+      # Themes
       icon_theme = {
         mode = lib.mkDefault "system";
         light = lib.mkDefault "Zed (Default)";
         dark = lib.mkDefault "Zed (Default)";
-      };
-      project_panel = {
-        dock = lib.mkDefault "left";
-      };
-      terminal = {
-        dock = lib.mkDefault "bottom";
-      };
-      telemetry = {
-        diagnostics = lib.mkDefault false;
-        metrics = lib.mkDefault false;
       };
       theme = {
         mode = lib.mkDefault "system";
@@ -77,6 +70,48 @@
         dark = lib.mkDefault "JetBrains Islands Dark";
       };
 
+      # Panels
+      git_panel = {
+        dock = lib.mkDefault "left";
+      };
+      project_panel = {
+        dock = lib.mkDefault "left";
+      };
+      terminal = {
+        dock = lib.mkDefault "bottom";
+      };
+
+      # Privacy
+      edit_predictions = {
+        allow_data_collection = lib.mkDefault "no";
+        disabled_globs = [
+          "**/*.cert"
+          "**/*.crt"
+          "**/*.env*"
+          "**/*.key"
+          "**/*.pem"
+          "**/*.pfx"
+          "**/*.p12"
+          "**/*passphrase*"
+          "**/*secret*.bak"
+          "**/*secret*.conf"
+          "**/*secret*.ini"
+          "**/*secret*.json"
+          "**/*secret*.jsonl"
+          "**/*secret*.toml"
+          "**/*secret*.yaml"
+          "**/*secret*.yml"
+          "**/secret/**"
+          "**/secrets/**"
+          "**/ssh/**"
+        ];
+      };
+      telemetry = {
+        diagnostics = lib.mkDefault false;
+        metrics = lib.mkDefault false;
+      };
+
+      # https://zed.dev/docs/languages
       languages = {
         Markdown = {
           document_folding_ranges = lib.mkDefault "on";
@@ -109,6 +144,7 @@
     };
 
     # https://zed.dev/docs/key-bindings
+    # https://zed.dev/docs/all-actions
     # Disable/Unbind keymaps:
     #  - "keymap" = null; -> disable keymap in a specific context
     #  - unbind = {"keymap" = "action"}; -> disable keymap in a specific context for a specific action
