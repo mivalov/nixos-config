@@ -72,6 +72,7 @@
 
       # Panels
       git_panel = {
+        commit_title_max_length = lib.mkDefault 50;
         dock = lib.mkDefault "left";
       };
       project_panel = {
