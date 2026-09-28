@@ -8,14 +8,15 @@ let
   cfg = config.features.auto-upgrade;
 in
 {
-  # Strategy: 2-Step auto-upgrade - "pull and rebuild":
-  # 1. Pre-flight: A shell script runs as unprivileged user to `git pull`
-  #    the NixOS config repository using the user's SSH keys.
-  #    This fetches only the new commits (delta), which is faster,
-  #    and can also handle access to one or more private repos without
-  #    the need to provide git credentials for the root user
-  # 2. Rebuild: The native nixos-upgrade service then rebuilds the system
-  #    (`nixos-rebuild boot`) using the local flake path.
+  # Strategy: "pull and rebuild":
+  # 1. Pull: ExecStartPre updates the NixOS configuration repository with
+  #    `git pull --ff-only` as the configured unprivileged user, allowing Git
+  #    to use that user's credentials. The pull fails if the local branch has
+  #    diverged from its upstream.
+  #    This mechanism can also be extended to update additional private repos
+  #    without the need to provide git credentials for the root user.
+  # 2. Rebuild: The built-in nixos-upgrade service runs `nixos-rebuild boot`
+  #    using the local flake path to the repository.
   options.features.auto-upgrade = {
     enable = lib.mkEnableOption "Automated NixOS upgrades from a local flake path";
 
@@ -91,14 +92,17 @@ in
     # Built-in NixOS auto-upgrade service
     system.autoUpgrade = {
       enable = true;
+      # '--upgrade' updates Nix channels and has no effect on flake-based systems
+      upgrade = lib.mkDefault false;
       flake = lib.mkDefault "git+file://${cfg.flakePath}#${config.networking.hostName}";
       operation = lib.mkDefault "boot";
       dates = lib.mkDefault cfg.dates;
       flags = [
-        # Ensure nix uses the pinned versions in 'flake.lock'
+        # Disallow `flake.lock` changes, updated pinned versions must arrive through Git
         "--no-update-lock-file"
-        # Forbid nix from writing to the disk, avoiding conflicts on `git pull`
+        # Never persist a lock file generated during the rebuild process
         "--no-write-lock-file"
+        # Include full build logs
         #"--print-build-logs"
       ];
       randomizedDelaySec = lib.mkDefault cfg.randomizedDelaySec;
@@ -127,7 +131,7 @@ in
               echo "Upgrade Attempt: $(date -Iseconds)"
               echo "------------------------------------------"
 
-              if sudo -u ${cfg.user} git -C "${cfg.flakePath}" pull; then
+              if sudo -u ${cfg.user} git -C "${cfg.flakePath}" pull --ff-only; then
                 REV=$(sudo -u ${cfg.user} git -C "${cfg.flakePath}" rev-parse HEAD)
                 echo "Git Pull: SUCCESS"
                 echo "Revision: ''${REV}"
@@ -152,7 +156,8 @@ in
       # In order to configure git, it must first be enabled
       enable = true;
       config = {
-        # In case of errors (repository path not owned by current user) -> mark repo as safe
+        # Trust this repository if its ownership differs from the Git process owner,
+        # otherwise errors can occur (e.g. "repository path not owned by current user")
         # https://git-scm.com/docs/git-config#Documentation/git-config.txt-safedirectory
         safe.directory = [ "${cfg.flakePath}" ];
       };
