@@ -52,6 +52,7 @@ in
         clock-show-seconds = mkDefault true;
         clock-show-weekday = mkDefault true;
         color-scheme = mkDefault "prefer-dark";
+        locate-pointer = mkDefault true;
         show-battery-percentage = mkDefault true;
       };
 
