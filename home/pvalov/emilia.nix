@@ -53,7 +53,7 @@ in
         "org.gnome.Console.desktop"
         "discord.desktop"
         "signal.desktop"
-        "joplin.desktop"
+        "appimagekit-joplin.desktop"
         "org.keepassxc.KeePassXC.desktop"
         "rustdesk.desktop"
         "org.gnome.Nautilus.desktop"
