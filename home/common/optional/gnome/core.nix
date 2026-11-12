@@ -75,6 +75,10 @@ in
         button-layout = mkDefault "appmenu:minimize,maximize,close";
       };
 
+      "org/gnome/shell" = {
+        always-show-log-out = mkDefault true;
+      };
+
       "org/gnome/settings-daemon/plugins/color" = {
         night-light-enabled = mkDefault true;
         night-light-schedule-automatic = mkDefault false;
